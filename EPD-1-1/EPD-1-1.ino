@@ -1,27 +1,12 @@
 const int led_pin = 13
 
 
-void setup() {
+  void
+  setup() {
   pinMode(led_pin, OUTPUT);
 }
 void loop() {
-  knipperen()
-}
-
-void knipperen(){
-  digitalWrite(led_pin, HIGH);
-  delay(1000);
-  digitalWrite(led_pin, LOW);
-  delay(1000);
-  digitalWrite(led_pin, HIGH);
-  delay(1000);
-  digitalWrite(led_pin, LOW);
-  delay(1000);
-  digitalwrite(led_pin, HIGH);
-  delay(500);
-  digitalwrite(led_pin, LOW);
-  delay(500);
-  digitalwrite(led_pin, HIGH);
-  delay(500);
-  digitalwrite(led_pin, LOW);
+  //knipperen_geen_for()
+  knipperen_met_for(1000, 1)
+  knipperen_met_for(500, 2)
 }
