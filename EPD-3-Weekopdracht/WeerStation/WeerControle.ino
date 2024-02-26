@@ -3,8 +3,8 @@ void weerControle_Setup(){
 }
 
 void weerControle_verstuur(char windrichting, int lichtSterkte, int temperatuur){
-  Serial.write(temperatuur);
-  Serial.write(lichtSterkte);
-  Serial.write(windrichting);
-  Serial.write(127);
+  //Serial.write(temperatuur);
+  //Serial.write(lichtSterkte);
+  //Serial.write(windrichting);
+  //Serial.write(127);
 }
