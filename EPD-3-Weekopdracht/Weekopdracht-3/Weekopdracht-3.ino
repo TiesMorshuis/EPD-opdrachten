@@ -38,7 +38,7 @@ float getTemperatuurInGradenCelcius() {
   return (vout - vout0) / tc;
 }
 
-byte getWindrichting(){
+int getWindrichting(){
   byte windrichting;
   int sensorGetal = analogRead(A1);
   int nieuwSensorGetal = map(sensorGetal, 0, 1023, 0, 359);
