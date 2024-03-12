@@ -1,6 +1,7 @@
 const int rodePin = 4;
 const int gelePin = 5;
 const int groenePin = 6;
+char versnelling;
 
 
 
@@ -9,9 +10,14 @@ void setup() {
   buzzerControl_Setup();
   afstandSensorControl_Setup();
   serialControl_Setup();
+  while(versnelling == NULL){
+  versnelling = serialControl_leesVersnelling();
+  }
 }
 
 void loop() {
+  switch(versnelling){
+    case 'r':
   float distance = afstandSensorControl_AfstandBerekenen();
   serialControl_AfstandPrinten(distance);
   if (distance <= 10) {
@@ -34,5 +40,7 @@ void loop() {
     ledControl_LedUitzetten(rodePin);
     ledControl_LedUitzetten(gelePin);
     ledControl_LedAanzetten(groenePin);
+  }
+  break;
   }
 }

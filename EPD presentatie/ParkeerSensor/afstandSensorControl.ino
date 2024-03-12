@@ -1,6 +1,7 @@
 const int echoPin = 8;
 const int trigPin = 9;
 float duration, distance;
+char versnellingUitgelezen;
 
 void afstandSensorControl_Setup() {
   pinMode(trigPin, OUTPUT);
@@ -17,3 +18,4 @@ float afstandSensorControl_AfstandBerekenen() {
   distance = (duration * .0343) / 2;
   return distance;
 }
+
