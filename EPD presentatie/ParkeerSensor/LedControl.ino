@@ -1,5 +1,3 @@
-
-
 void ledControl_Setup() {
   pinMode(rodePin, OUTPUT);
   pinMode(gelePin, OUTPUT);
