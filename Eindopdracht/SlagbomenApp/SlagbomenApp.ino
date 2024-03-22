@@ -1,6 +1,9 @@
 void setup() {
-  // put your setup code here, to run once:
-
+  displayControl_Setup();
+  slagboomControl_Setup();
+  buzzerControl_Setup();
+  ledControl_Setup();
+  buttonControl_Setup();
 }
 
 void loop() {

@@ -1,5 +1,7 @@
+#include <Servo.h>
 const int servoPin = 8;
+Servo servo;
 
-void servoSetup(){
-  myservo.attach(servoPin);
+void slagboomControl_Setup(){
+  servo.attach(servoPin);
 }
