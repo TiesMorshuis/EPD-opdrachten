@@ -1,19 +1,23 @@
-const int buzzerPin = 9;
-long previousMillis;
+long buzzerPreviousMillis = 0;
+int buzzerInterval = 100;
+int buzzerFrequentie = 400;
+int buzzerDuratie = 50;
+int buzzerPin = 9;
+
 void buzzerControl_Setup(){
   pinMode(buzzerPin, OUTPUT);
 }
 
-void buzzerControl_buzzerGeluidAfspelen(String patroon){
+void buzzerControl_buzzerGeluidAfspelen(int patroon){
   switch(patroon){
-    case 'TIKKEN';
+    case 1:
       unsigned long currentMillis = millis();
-        if (currentMillis - previousMillis < 100){
-          previousMillis = currentMillis;
-          tone(buzzerPin 400, 50);
+        if (currentMillis - buzzerPreviousMillis < buzzerInterval){
+          buzzerPreviousMillis = currentMillis;
+          tone(buzzerPin, buzzerFrequentie, buzzerDuratie);
         }
       break;
-    case 'UIT';
+    case 2:
       digitalWrite(buzzerPin, LOW);
   }
 }

@@ -2,7 +2,7 @@ const byte DS = 13; //Data Serial
 const byte ST_CP = 12; // Storage Clock Pulse
 const byte SH_CP = 11; // Shift Clock Pulse
 
-void displayControl_setup(){
+void displayControl_Setup(){
   pinMode(DS, OUTPUT);
   pinMode(ST_CP, OUTPUT);
   pinMode(SH_CP, OUTPUT);
@@ -25,19 +25,19 @@ void displayControl_displayOff(){
 byte displayControl_getPatroon(int getal){
   byte patroon;
   switch(getal){
-    case 1;
+    case 1:
       patroon = B01100000;
       break;
-    case 2;
+    case 2:
       patroon = B11011010;
       break;
-    case 3;
+    case 3:
       patroon = B11110010;
       break;
-    case 4;
+    case 4:
       patroon = B01100110;
       break;
-    case 5;
+    case 5:
       patroon = B10110110;
       break;
   }
