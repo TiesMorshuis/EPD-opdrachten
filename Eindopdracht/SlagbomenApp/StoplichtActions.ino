@@ -12,9 +12,24 @@ void stoplichtSetup(){
 
 void stoplichtLoop(){
   //todo
+  //get eerst ingedrukte knop en geef die prioriteit als trein voorbij is.
+  if (slagboomControl_isSlagboomOpen() == false){
+    stoplichtControl_treinAanwezig();
+  }
+  
 }
 
+// ---Actions-----
+void stoplichtControl_treinAanwezig(){
+  ledControl_ledAan(stoplichtNoordRoodPin);
+  ledControl_ledAan(stoplichtZuidRoodPin);
+  ledControl_ledLatenKnipperen(stoplichtNoordGeelPin);
+  ledControl_ledLatenKnipperen(stoplichtZuidGeelPin);
+  }
 
+
+
+// ---Getters -----
 
 int getStoplichtZuidRoodPin(){
   return stoplichtZuidRoodPin;
