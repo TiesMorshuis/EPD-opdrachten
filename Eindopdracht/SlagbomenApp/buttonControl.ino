@@ -23,7 +23,7 @@ void buttonControl_buttonPressed(){
   
 }
 
-// --- Setters -----
+// --- Setters --- //
 
 void setEerstIngedrukteKnop(char ingedrukteKnop){
   switch(ingedrukteKnop){
@@ -36,7 +36,7 @@ void setEerstIngedrukteKnop(char ingedrukteKnop){
   } 
 }
 
-// --- Getters-----
+// --- Getters --- //
 
 int getKnopNoord(){
   return knopNoord;

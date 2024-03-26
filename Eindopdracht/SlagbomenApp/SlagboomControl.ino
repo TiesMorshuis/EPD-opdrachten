@@ -9,8 +9,10 @@ int slagboomStand;
 const int slagboomStand_Open = 1;
 const int slagboomStand_Dicht = 2;
 
-int slagboomControl_Interval = 1000;
+int slagboomControl_Interval = 100;
+
 int beginPositie = 90;
+int huidigePositie = beginPositie;
 int eindPositie = 180;
 
 void slagboomControl_Setup() {
@@ -19,27 +21,34 @@ void slagboomControl_Setup() {
 }
 
 void slagboomControl_SlagboomBewegen(int slagboomStand) {
+  boolean timer = timerControl_isTimerAfgegaan(slagboomControl_Interval);
   switch (slagboomStand) {
     case slagboomStand_Open:
-      for (int positie = beginPositie; positie <= eindPositie; positie++) {
-        if (timerControl_isTimerAfgegaan(slagboomControl_Interval) == true) {
-          servo.write(positie);
+      eindPositie = 90;
+      beginPositie = 180;
+      do {
+        if (timer == true) {
+          huidigePositie += 1;
+          servo.write(huidigePositie);
         }
-      }
+      } while (huidigePositie != eindPositie);
       break;
     case slagboomStand_Dicht:
-      for (int positie = eindPositie; positie >= beginPositie; positie--) {
-        if (timerControl_isTimerAfgegaan(slagboomControl_Interval) == true) {
-          servo.write(positie);
+      eindPositie = 180;
+      beginPositie = 90;
+      do {
+        if (timer == true) {
+          huidigePositie -= 1;
+          servo.write(huidigePositie);
         }
-      }
+      } while (huidigePositie != eindPositie);
       break;
   }
 }
 
 
 boolean slagboomControl_isSlagboomOpen() {
-  switch(slagboomStand){
+  switch (slagboomStand) {
     case slagboomStand_Open:
       return true;
     case slagboomStand_Dicht:
@@ -50,61 +59,61 @@ boolean slagboomControl_isSlagboomOpen() {
 
 
 //States
-// ---Slagboom_Open_Entry State-----
+// --- Slagboom_Open_Entry State --- //
 void slagboom_Open_Entry() {
   //Treinsensor == false;
 }
 
-// ---Slagboom_Open_Do State-----
+// --- Slagboom_Open_Do State --- //
 void slagboom_Open_Do() {
   //Set display, roodstoplicht(uit)
 }
 
-// ---Slagboom_Open_Exit State-----
+// --- Slagboom_Open_Exit State --- //
 void slagboom_Open_Exit() {
   //todo
 }
 
-// ---Slagboom_DichtGaan_Entry State-----
+// --- Slagboom_DichtGaan_Entry State --- //
 void slagboom_DichtGaan_Entry() {
   //todo
 }
 
-// ---Slagboom_DichtGaan_Do State-----
+// --- Slagboom_DichtGaan_Do State --- //
 void slagboom_DichtGaan_Do() {
   stoplichtControl_treinAanwezig();
   buzzerControl_buzzerGeluidAfspelen(TIKKEN);
   slagboomControl_SlagboomBewegen(slagboomStand_Dicht);
 }
 
-// ---Slagboom_DichtGaan_Exit State-----
+// --- Slagboom_DichtGaan_Exit State --- //
 void slagboom_DichtGaan_Exit() {
   //todo
 }
 
-// ---Slagboom_Dicht_Entry State-----
+// --- Slagboom_Dicht_Entry State --- //
 void slagboom_Dicht_Entry() {
   buzzerControl_buzzerGeluidAfspelen(UIT);
   //starttimer, treinsensor = false
 }
 
-// ---Slagboom_Dicht_Do State-----
+// --- Slagboom_Dicht_Do State --- //
 void slagboom_Dicht_Do() {
   stoplichtControl_treinAanwezig();
   //gettimer
 }
 
-// ---Slagboom_Dicht_Exit State-----
+// --- Slagboom_Dicht_Exit State ---- //
 void slagboom_Dicht_Exit() {
   //todo
 }
 
-// ---Slagboom_OpenGaan_Entry State-----
+// --- Slagboom_OpenGaan_Entry State --- //
 void slagboom_OpenGaan_Entry() {
   //todo
 }
 
-// ---Slagboom_OpenGaan_Do State-----
+// --- Slagboom_OpenGaan_Do State --- //
 void slagboom_OpenGaan_Do() {
   slagboomControl_SlagboomBewegen(slagboomStand_Open);
 }

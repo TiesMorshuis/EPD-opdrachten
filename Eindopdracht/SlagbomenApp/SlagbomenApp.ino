@@ -8,6 +8,7 @@ void setup() {
 
 //treinstatus aanpassen moet als EXIT!
 void loop() {
+  /*
   char ingedrukteKnop = getButtonPressed();
   stoplichtLoop();
   switch(ingedrukteKnop){
@@ -39,6 +40,6 @@ void loop() {
         treinActions_setIsTreinVoorbij(false);
       }
       break;
-  }
+  }*/
   
 }
