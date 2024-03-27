@@ -61,6 +61,7 @@ boolean slagboomControl_isSlagboomOpen() {
 //States
 // --- Slagboom_Open_Entry State --- //
 void slagboom_Open_Entry() {
+  setEerstIngedrukteKnop(NULL);
   //Treinsensor == false;
 }
 
@@ -76,6 +77,8 @@ void slagboom_Open_Exit() {
 
 // --- Slagboom_DichtGaan_Entry State --- //
 void slagboom_DichtGaan_Entry() {
+  treinActions_setIsTreinAanwezig(true);
+  slagboom_DichtGaan_Do();
   //todo
 }
 

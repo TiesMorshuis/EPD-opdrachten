@@ -1,10 +1,9 @@
-boolean isTreinVoorbij = false;
+boolean isTreinAanwezig = false;
 
-boolean treinActions_getIsTreinVoorbij(){
-  return isTreinVoorbij;
+boolean treinActions_getIsTreinAanwezig(){
+  return isTreinAanwezig;
 }
 
-//todo verzin hier een andere naam voor!!!!!
-void treinActions_setIsTreinVoorbij(boolean waarde){
-  isTreinVoorbij = waarde;
+void treinActions_setIsTreinAanwezig(boolean waarde){
+  isTreinAanwezig = waarde;
 }

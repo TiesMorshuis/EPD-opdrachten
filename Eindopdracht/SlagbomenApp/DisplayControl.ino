@@ -6,6 +6,8 @@ byte font[] {
   B01100110, // 4
   B11110010, // 3
   B11011010, // 2
+  B01100000, // 1
+  B11111100  // 0
 };
 
 void displayControl_Setup(){
