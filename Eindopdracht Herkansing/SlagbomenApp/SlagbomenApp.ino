@@ -1,46 +1,88 @@
+const int slagboomStand_Openen = 1;
+const int slagboomStand_Sluiten = 2;
+const int buzzer_SNEL = 1;
+const int buzzer_AFTELLEN = 2;
+const int buzzer_STOP = 0;
+const int stoplichtKnipperen_START = 1;
+const int stoplichtKnipperen_STOP = 0;
+boolean treinSensor = false;
+boolean andereTreinSensor = false;
+char ingedrukteKnop;
+char stoplichtVoorrangKnop;
+
 void setup() {
   //Alle setups van verschillende onderdelen
-  stoplichtControl_Setup();
-  ledControl_Setup();
-  buzzerControl_Setup();
-  main_Setup();
+  stoplichtControl_setup();
+  ledControl_setup();
+  buzzerControl_setup();
+  main_setup();
   displayControl_setup();
+  slagboomControl_setup(slagboomStand_Openen);
   pinMode(5, OUTPUT);
 }
 
-void main_Setup(){
-  main_Setup_Entry();
-  main_Setup_Do();
-  main_Setup_Exit();
+void main_setup(){
+  main_setup_Entry();
+  main_setup_Do();
+  main_setup_Exit();
 }
 void loop() {
-  digitalWrite(5, HIGH);
+  switch (ingedrukteKnop) {
+    case 'N':
+    case 'O':
+      slagboomDichtgaan_Entry();
+      slagboomDichtgaan_Do();
+    case 'Z':
+    case 'W':
+  }
 }
 
-void main_Setup_Entry(){
+void main_setup_Entry(){
   // Stoplichten_Op_Rood();
   // SlagboomControl_SlagboomBewegen(90);
   // treinSensor = false;
   // andereTreinSensor = false;
 }
 
-void main_Setup_Do(){}
-void main_Setup_Exit(){}
+void main_setup_Do(){}
+void main_setup_Exit(){}
 
-void Slagboom_Dichtgaan_Entry(){}
-void Slagboom_Dichtgaan_Do(){}
-void Slagboom_Dichtgaan_Exit(){}
+// Slagboom Dichtgaan States
+void slagboomDichtgaan_Entry(){}
 
-void Slagboom_Dicht_Entry(){}
-void Slagboom_Dicht_Do(){}
-void Slagboom_Dicht_Exit(){}
+void slagboomDichtgaan_Do(){
+  slagboomControl_slagboomBewegen(slagboomStand_Sluiten);
+  stoplichtControl_stoplichtOranjeKnipperen(stoplichtKnipperen_START);
+  buzzerControl_buzzerTikken(buzzer_SNEL);
+}
 
-void Slagboom_Opengaan_Entry(){}
-void Slagboom_Opengaan_Do(){}
-void Slagboom_Opengaan_Exit(){}
+void SlagboomDichtgaan_Exit(){
+  buzzerControl_buzzerTikken(buzzer_STOP);
+}
 
-void Slagboom_Open_Entry(){}
-void Slagboom_Open_Do(){}
-void Slagboom_Open_Exit(){}
+// Slagboom Dicht States
+void slagboomDicht_Entry(){}
+void slagboomDicht_Do(){}
+void slagboomDicht_Exit(){}
+
+// Slagboom Opengaan States
+void slagboomOpengaan_Entry(){}
+void slagboomOpengaan_Do(){
+  buzzerControl_buzzerTikken(buzzer_SNEL);
+  slagboomControl_slagboomBewegen(slagboomStand_Openen);
+}
+void slagboomOpengaan_Exit(){}
+
+// Slagboom Open States
+void slagboomOpen_Entry(){}
+
+void slagboomOpen_Do(){
+  displayControl_aftellen();
+  stoplichtControl_stoplichtOranjeKnipperen(stoplichtKnipperen_STOP);
+  buzzerControl_buzzerTikken(buzzer_AFTELLEN);
+}
+void slagboomOpen_Exit(){
+  buzzerControl_buzzerTikken(buzzer_STOP);
+}
 
 

@@ -8,14 +8,14 @@ char buttonPressed;
 int buttonState;
 int eerstIngedrukteKnop;
 
-void buttonControl_Setup() {
+void buttonControl_setup() {
   for (int index = 0; index < nr_Of_Knoppen; index++){
     pinMode(knoppenLijst[index], INPUT);
   }
 
 }
 
-void buttonControl_ButtonLoop(){
+void buttonControl_buttonLoop(){
   //switch(buttonPressed)
 }
 
@@ -25,7 +25,7 @@ void buttonControl_buttonPressed(){
 
 // --- Setters --- //
 
-void setEerstIngedrukteKnop(char ingedrukteKnop){
+void setVoorrangStoplichtKnop(char ingedrukteKnop){
   switch(ingedrukteKnop){
     case 'N':
       eerstIngedrukteKnop = knopNoord;

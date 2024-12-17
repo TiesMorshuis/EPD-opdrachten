@@ -69,9 +69,9 @@ void displayControl_setDisplay(int getal){
   digitalWrite(ST_CP, LOW);
 }
 
-void displayControl_Aftellen(){
+void displayControl_aftellen(){
   for (int index = 5; index >= 1; index--){
-    if (TimerControl_Timer(1000) == true){
+    if (timerControl_timer(1000) == true){
       displayControl_setDisplay(index);
     }
   }

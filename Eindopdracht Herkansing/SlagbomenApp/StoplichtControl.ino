@@ -8,31 +8,32 @@ const int noordRood = 5;
 const int zuidGroen = 4;
 const int zuidOranje = 3;
 const int zuidRood = 2;
+int ledState = LOW;
 
-void stoplichtControl_Setup(){
-  stoplichtControl_StoplichtenOpRood();
+void stoplichtControl_setup(){
+  stoplichtControl_stoplichtenOpRood();
 }
 
-void stoplichtControl_StoplichtenOpRood(){
+void stoplichtControl_stoplichtenOpRood(){
   ledControl_alleLedUit();
-  ledControl_LedAan(zuidRood);
-  ledControl_LedAan(noordRood);
+  ledControl_ledAan(zuidRood);
+  ledControl_ledAan(noordRood);
 }
 
-void stoplichtControl_StoplichtCyclus(char stoplichtChar){
+void stoplichtControl_stoplichtCyclus(char stoplichtChar){
   switch (stoplichtChar){
     case 'Z':
     // if (ingedrukteKnop = 'O' or ingedrukteKnop = 'W'){
     //   stoplichtControl_StoplichtNaarOranje(stoplichtChar);
     //   break;
     // }
-      ledControl_LedAan(4);
-      if (TimerControl_Timer(groenlichtTijd) == true){
-        ledControl_LedUit(4);
-        ledControl_LedAan(3);
-        if (TimerControl_Timer(oranjelichtTijd) == true){
-          ledControl_LedUit(3);
-          ledControl_LedAan(2);
+      ledControl_ledAan(4);
+      if (timerControl_timer(groenlichtTijd) == true){
+        ledControl_ledUit(4);
+        ledControl_ledAan(3);
+        if (timerControl_timer(oranjelichtTijd) == true){
+          ledControl_ledUit(3);
+          ledControl_ledAan(2);
         }
       }
     case 'N':
@@ -40,39 +41,59 @@ void stoplichtControl_StoplichtCyclus(char stoplichtChar){
     //   stoplichtControl_StoplichtNaarOranje(stoplichtChar);
     //   break;
     // }
-      ledControl_LedAan(7);
-      if (TimerControl_Timer(groenlichtTijd) == true){
-        ledControl_LedUit(7);
-        ledControl_LedAan(6);
-        if (TimerControl_Timer(oranjelichtTijd) == true){
-          ledControl_LedUit(6);
-          ledControl_LedAan(5);
+      ledControl_ledAan(7);
+      if (timerControl_timer(groenlichtTijd) == true){
+        ledControl_ledUit(7);
+        ledControl_ledAan(6);
+        if (timerControl_timer(oranjelichtTijd) == true){
+          ledControl_ledUit(6);
+          ledControl_ledAan(5);
         }
   }
 }
 }
 
-void stoplichtControl_StoplichtCyclusNeutraal(char ingedrukteKnop){
-  stoplichtControl_StoplichtenOpRood();
-  stoplichtControl_StoplichtCyclus(ingedrukteKnop);
+void stoplichtControl_stoplichtCyclusNeutraal(char ingedrukteKnop){
+  stoplichtControl_stoplichtenOpRood();
+  stoplichtControl_stoplichtCyclus(ingedrukteKnop);
 }
 
-void stoplichtControl_StoplichtNaarOranje(char stoplichtChar){
+void stoplichtControl_stoplichtNaarOranje(char stoplichtChar){
   switch (stoplichtChar){
     case 'Z':
-      ledControl_LedUit(4);
-      ledControl_LedAan(3);
-      if(TimerControl_Timer(oranjelichtTijd == true)){
-        ledControl_LedUit(3);
-        ledControl_LedAan(2);
+      ledControl_ledUit(4);
+      ledControl_ledAan(3);
+      if(timerControl_timer(oranjelichtTijd == true)){
+        ledControl_ledUit(3);
+        ledControl_ledAan(2);
       }
       case 'N':
-      ledControl_LedUit(7);
-      ledControl_LedAan(6);
-      if(TimerControl_Timer(oranjelichtTijd == true)){
-        ledControl_LedUit(6);
-        ledControl_LedAan(5);
+      ledControl_ledUit(7);
+      ledControl_ledAan(6);
+      if(timerControl_timer(oranjelichtTijd == true)){
+        ledControl_ledUit(6);
+        ledControl_ledAan(5);
       }
   }
 }
 
+void stoplichtControl_stoplichtOranjeKnipperen(int status){
+  if(status == 1){
+  if(timerControl_timer(1000) == true){
+    if (ledState == LOW){
+      digitalWrite(noordOranje, HIGH);
+      digitalWrite(zuidOranje, HIGH);
+      ledState = HIGH;
+    }
+    else if (ledState == HIGH){
+      digitalWrite(noordOranje, LOW);
+      digitalWrite(zuidOranje, LOW);
+      ledState = LOW;
+    }
+  }
+  }
+  else {
+    digitalWrite(noordOranje, LOW);
+    digitalWrite(zuidOranje, LOW);
+  }
+}

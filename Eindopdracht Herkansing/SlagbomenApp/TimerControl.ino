@@ -1,6 +1,6 @@
 long previousMillis;
 
-boolean TimerControl_Timer(int interval){
+boolean timerControl_timer(int interval){
   unsigned long currentMillis = millis();
   if(currentMillis - previousMillis > interval){
     previousMillis = currentMillis;
