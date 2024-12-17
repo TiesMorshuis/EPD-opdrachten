@@ -41,8 +41,9 @@ void slagboomControl_SlagboomBewegen(int slagboomStand) {
           huidigePositie -= 1;
           servo.write(huidigePositie);
         }
-      } while (huidigePositie != eindPositie);
-      break;
+      } while (huidigePositie != eindPositie) {
+        break;
+      }
   }
 }
 
