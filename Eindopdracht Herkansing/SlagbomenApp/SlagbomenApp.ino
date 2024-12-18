@@ -26,10 +26,10 @@ const int STATE_stoplichtCyclusNeutraal_Exit = 18;
 const int STATE_stoplichtCyclus_Entry = 19;
 const int STATE_stoplichtCyclus_Do = 20;
 const int STATE_stoplichtCyclus_Exit = 21;
-int currentState = STATE_stoplichtCyclus_Entry;
+int currentState;
 boolean treinSensor = false;
 boolean andereTreinSensor = false;
-char ingedrukteKnop = 'W';
+char ingedrukteKnop = 'N';
 char stoplichtVoorrangKnop;
 
 
@@ -40,86 +40,100 @@ void setup() {
   serialSetup();
   ledControl_setup();
   stoplichtControl_setup();
-  
   buzzerControl_setup();
   main_setup();
   displayControl_setup();
   slagboomControl_setup(slagboomStand_Openen);
   currentState = STATE_stoplichtCyclusNeutraal_Entry;
 }
+
 void loop(){
   switch (currentState){
     case STATE_stoplichtCyclusNeutraal_Entry:
       Serial.println(currentState);
       stoplichtCyclusNeutraal_Entry();
       currentState = STATE_stoplichtCyclusNeutraal_Do;
+      break;
     case STATE_stoplichtCyclusNeutraal_Do:
       Serial.println(currentState);
       stoplichtCyclusNeutraal_Do();
+      break;
     case STATE_stoplichtCyclusNeutraal_Exit:
       Serial.println(currentState);
       stoplichtCyclusNeutraal_Exit();
-    
+      break;
     case STATE_stoplichtCyclus_Entry:
     Serial.println(currentState);
       stoplichtCyclus_Entry();
       currentState = STATE_stoplichtCyclus_Do;
+      break;
     case STATE_stoplichtCyclus_Do:
     Serial.println(currentState);
       stoplichtCyclus_Do();
+      break;
     case STATE_stoplichtCyclus_Exit:
     Serial.println(currentState);
       stoplichtCyclus_Exit();
       currentState = STATE_stoplichtCyclusNeutraal_Entry;
-    
+      break;
     case STATE_slagboomDichtgaan_Entry:
       Serial.println(currentState);
       slagboomDichtgaan_Entry();
       currentState = STATE_slagboomDichtgaan_Do;
+      break;
     case STATE_slagboomDichtgaan_Do:
     Serial.println(currentState);
       slagboomDichtgaan_Do();
+      break;
     case STATE_slagboomDichtgaan_Exit:
     Serial.println(currentState);
       slagboomDichtgaan_Exit();
       currentState = STATE_slagboomDicht_Entry;
-    
+      break;
     case STATE_slagboomDicht_Entry:
     Serial.println(currentState);
       slagboomDicht_Entry();
       currentState = STATE_slagboomDicht_Do;
+      break;
     case STATE_slagboomDicht_Do:
-    Serial.println(currentState);
+      Serial.println(currentState);
       slagboomDicht_Do();
       currentState = STATE_slagboomDicht_Do;
+      Serial.println("State");
+      break;
     case STATE_slagboomDicht_Exit:
-    Serial.println(currentState);
+      Serial.println(currentState);
       slagboomDicht_Exit();
       currentState = STATE_slagboomOpengaan_Entry;
-
+      break;
     case STATE_slagboomOpengaan_Entry:
     Serial.println(currentState);
       slagboomOpengaan_Entry();
       currentState = STATE_slagboomOpengaan_Do;
+      break;
     case STATE_slagboomOpengaan_Do:
     Serial.println(currentState);
       slagboomOpengaan_Do();
+      break;
     case STATE_slagboomOpengaan_Exit:
     Serial.println(currentState);
       slagboomOpengaan_Exit();
       currentState = STATE_slagboomOpen_Entry;
-    
+      break;
     case STATE_slagboomOpen_Entry:
     Serial.println(currentState);
       slagboomOpen_Entry();
       currentState = STATE_slagboomOpen_Do;
+      break;
     case STATE_slagboomOpen_Do:
     Serial.println(currentState);
       slagboomOpen_Do();
+      break;
     case STATE_slagboomOpen_Exit:
     Serial.println(currentState);
       slagboomOpen_Exit();
       currentState = STATE_stoplichtCyclusNeutraal_Entry;
+      break;
   }
   
 }
@@ -130,7 +144,9 @@ void main_setup(){
 }
 
 // Slagboom Dichtgaan States
-void slagboomDichtgaan_Entry(){}
+void slagboomDichtgaan_Entry(){
+  currentState = STATE_slagboomDichtgaan_Entry;
+}
 
 void slagboomDichtgaan_Do(){
   slagboomControl_slagboomBewegen(slagboomStand_Sluiten);
@@ -149,7 +165,7 @@ void slagboomDicht_Entry(){}
 void slagboomDicht_Do(
   // stoplichtControl_stoplichtOranjeKnipperen(stoplichtKnipperen_START);
   
-){currentState = STATE_slagboomDicht_Do;}
+){}
 void slagboomDicht_Exit(){}
 
 // Slagboom Opengaan States
@@ -164,8 +180,8 @@ void slagboomOpengaan_Exit(){}
 void slagboomOpen_Entry(){}
 
 void slagboomOpen_Do(){
-  displayControl_aftellen();
   stoplichtControl_stoplichtOranjeKnipperen(stoplichtKnipperen_STOP);
+  displayControl_aftellen();
   buzzerControl_buzzerTikken(buzzer_AFTELLEN);
 }
 void slagboomOpen_Exit(){
@@ -188,11 +204,10 @@ void stoplichtCyclusNeutraal_Do(){
 }
 
 void stoplichtCyclusNeutraal_Exit(){
-  if (ingedrukteKnop == 'N' || ingedrukteKnop == 'Z'){
-    currentState = STATE_stoplichtCyclus_Entry;
-  }
-  else if (treinSensor == true){
+  if (treinSensor == true){
     currentState = STATE_slagboomDichtgaan_Entry;
+  } else if (ingedrukteKnop == 'N' || ingedrukteKnop == 'Z'){
+    currentState = STATE_stoplichtCyclus_Entry;
   }
 }
 

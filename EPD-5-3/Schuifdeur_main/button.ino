@@ -1,9 +1,12 @@
 // Module Button
 // --- States -----------
+
 const int BUTTON_STATE_RELEASED = 1;
 const int BUTTON_STATE_CHECK_PRESSED = 2;
 const int BUTTON_STATE_PRESSED = 3;
 const int BUTTON_STATE_CHECK_RELEASED = 4;
+int states[4] {BUTTON_STATE_RELEASED, BUTTON_STATE_RELEASED, BUTTON_STATE_RELEASED, BUTTON_STATE_RELEASED};
+boolean knopIngedrukt[] {false, false, false, false};
 // Current state
 int button_State;
 // Timer variables
@@ -13,58 +16,60 @@ unsigned long button_Previous;
 void button_Setup() {
   Serial.begin(9600);  // to print "CLICK"
   // Start state
-  button_State = BUTTON_STATE_RELEASED;
   button_Released_Entry();
 
 }
 // --- Loop --------------------
 void button_Loop() {
-  switch (button_State) {
+  for(int index = 0; index < 4; index++){
+    Serial.println(knopIngedrukt[index]);
+  switch (states[index]) {
     case BUTTON_STATE_RELEASED:
       button_Released_Do();
-      if (buttonHardware_Down() == true) {
+      if (buttonHardware_Down(index) == true) {
         button_Released_Exit();
-        button_State = BUTTON_STATE_CHECK_PRESSED;
+        states[index] = BUTTON_STATE_CHECK_PRESSED;
         button_Check_Pressed_Entry();
       }
       break;
     case BUTTON_STATE_CHECK_PRESSED:
       button_Check_Pressed_Do();
-      if (buttonHardware_Up() == true) {
+      if (buttonHardware_Up(index) == true) {
         button_Check_Pressed_Exit();
-        button_State = BUTTON_STATE_RELEASED;
+        states[index] = BUTTON_STATE_RELEASED;
         button_Released_Entry();
-      } else if ((buttonHardware_Down() == true)
+      } else if ((buttonHardware_Down(index) == true)
                  && (millis() - BUTTON_INTERVAL >= button_Previous)) {
         button_Check_Pressed_Exit();
-        button_State = BUTTON_STATE_PRESSED;
+        states[index] = BUTTON_STATE_PRESSED;
         button_Pressed_Entry();
       }
       break;
     case BUTTON_STATE_PRESSED:
       button_Pressed_Do();
-      if (buttonHardware_Up() == true) {
+      if (buttonHardware_Up(index) == true) {
         button_Pressed_Exit();
-        button_State = BUTTON_STATE_CHECK_RELEASED;
+        states[index] = BUTTON_STATE_CHECK_RELEASED;
         button_Check_Released_Entry();
       }
       break;
     case BUTTON_STATE_CHECK_RELEASED:
       button_Check_Released_Do();
-      if (buttonHardware_Down() == true) {
+      if (buttonHardware_Down(index) == true) {
         button_Check_Released_Exit();
-        button_State = BUTTON_STATE_PRESSED;
+        states[index] = BUTTON_STATE_PRESSED;
         button_Pressed_Entry();
-      } else if ((buttonHardware_Up() == true)
+      } else if ((buttonHardware_Up(index) == true)
                  && (millis() - BUTTON_INTERVAL >= button_Previous)) {
         button_Check_Released_Exit();
-        button_State = BUTTON_STATE_RELEASED;
+        states[index] = BUTTON_STATE_RELEASED;
+        knopIngedrukt[index] = true;
         // on this transation the CLICK occurs!
         Serial.println("CLICK");
         button_Released_Entry();
       }
       break;
-  }
+  }}
 }
 // --- BUTTON_STATE_RELEASED -----------
 void button_Released_Entry() {
@@ -106,3 +111,40 @@ void button_Check_Released_Do() {
 void button_Check_Released_Exit() {
   // <nothing>
 }
+
+// --- Getters ------------
+// boolean getKnopNoordIngedrukt(){
+//   return(knopNoordIngedrukt);
+// }
+
+// boolean getKnopOostIngedrukt(){
+//   return(knopOostIngedrukt);
+// }
+
+// boolean getKnopZuidIngedrukt(){
+//   return(knopZuidIngedrukt);
+// }
+
+// boolean getKnopWestIngedrukt(){
+//   return(knopWestIngedrukt);
+// }
+
+int getStates(){
+  return(states);
+}
+// --- Setters -------------
+// void setKnopNoordIngedrukt(boolean waarde){
+//   knopNoordIngedrukt = waarde;
+// }
+
+// void setKnopOostIngedrukt(boolean waarde){
+//   knopOostIngedrukt = waarde;
+// }
+
+// void setKnopZuidIngedrukt(boolean waarde){
+//   knopZuidIngedrukt = waarde;
+// }
+
+// void setKnopWestIngedrukt(boolean waarde){
+//   knopWestIngedrukt = waarde;
+// }
