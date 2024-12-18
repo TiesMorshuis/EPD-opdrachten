@@ -10,6 +10,8 @@ byte font[] {
   B11111100  // 0
 };
 
+int displayStatus = 5;
+
 void displayControl_setup(){
   pinMode(DS, OUTPUT);
   pinMode(ST_CP, OUTPUT);
@@ -70,10 +72,51 @@ void displayControl_setDisplay(int getal){
 }
 
 void displayControl_aftellen(){
-  for (int index = 5; index >= 1; index--){
-    if (timerControl_timer(1000) == true){
-      displayControl_setDisplay(index);
-    }
+  switch (displayStatus){
+    case 5:
+        displayControl_setDisplay(5);
+          buzzerControl_buzzerTikken(buzzer_AFTELLEN);
+          if(timerControl_timer2(1000) == true){
+        displayStatus = 4;
+          }
+      break;
+    case 4:
+        displayControl_setDisplay(4);
+        buzzerControl_buzzerTikken(buzzer_AFTELLEN);
+          if(timerControl_timer2(1000) == true){
+        displayStatus = 3;
+          }
+      break;
+    case 3:
+        displayControl_setDisplay(3);
+        buzzerControl_buzzerTikken(buzzer_AFTELLEN);
+          if(timerControl_timer2(1000) == true){
+        displayStatus = 2;
+          }
+      break;
+    case 2:
+        displayControl_setDisplay(2);
+        buzzerControl_buzzerTikken(buzzer_AFTELLEN);
+          if(timerControl_timer2(1000) == true){
+        displayStatus = 1;
+          }
+      break;
+    case 1:
+        displayControl_setDisplay(1);
+        buzzerControl_buzzerTikken(buzzer_AFTELLEN);
+          if(timerControl_timer2(1000) == true){
+        displayStatus = 0;
+          }
+      break;
+    case 0:
+        displayControl_setDisplay(0);
+        buzzerControl_buzzerTikken(buzzer_AFTELLEN);
+          if(timerControl_timer2(1000) == true){
+        displayStatus = 5;
+        
+          }
+        currentState = STATE_slagboomOpen_Exit;
+      break;
   }
 }
 

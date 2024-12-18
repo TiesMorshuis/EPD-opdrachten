@@ -3,8 +3,6 @@ const int slagboomStand_Sluiten = 2;
 const int buzzer_SNEL = 1;
 const int buzzer_AFTELLEN = 2;
 const int buzzer_STOP = 0;
-const int stoplichtKnipperen_START = 1;
-const int stoplichtKnipperen_STOP = 0;
 const int STATE_slagboomDichtgaan_Entry = 1;
 const int STATE_slagboomDichtgaan_Do = 2;
 const int STATE_slagboomDichtgaan_Exit = 3;
@@ -17,9 +15,6 @@ const int STATE_slagboomOpengaan_Exit = 9;
 const int STATE_slagboomOpen_Entry = 10;
 const int STATE_slagboomOpen_Do = 11;
 const int STATE_slagboomOpen_Exit = 12;
-const int STATE_mainSetup_Entry = 13;
-const int STATE_mainSetup_Do = 14;
-const int STATE_mainSetup_Exit = 15;
 const int STATE_stoplichtCyclusNeutraal_Entry = 16;
 const int STATE_stoplichtCyclusNeutraal_Do = 17;
 const int STATE_stoplichtCyclusNeutraal_Exit = 18;
@@ -29,14 +24,18 @@ const int STATE_stoplichtCyclus_Exit = 21;
 int currentState;
 boolean treinSensor = false;
 boolean andereTreinSensor = false;
-char ingedrukteKnop = 'N';
-char stoplichtVoorrangKnop;
+char ingedrukteKnopStoplicht;
+char ingedrukteKnopTrein;
+char ingedrukteKnopTreinAndereKant;
+char ingedrukteKnopStoplichtWachtrij;
 
 
 
 
 void setup() {
   //Alle setups van verschillende onderdelen
+  buttonHardware_Setup();
+  button_Setup();
   serialSetup();
   ledControl_setup();
   stoplichtControl_setup();
@@ -48,89 +47,77 @@ void setup() {
 }
 
 void loop(){
+  button_Loop();
+  assignButtons(getKnopIngedruktArray());
+  Serial.println(currentState);
   switch (currentState){
     case STATE_stoplichtCyclusNeutraal_Entry:
-      Serial.println(currentState);
       stoplichtCyclusNeutraal_Entry();
       currentState = STATE_stoplichtCyclusNeutraal_Do;
       break;
     case STATE_stoplichtCyclusNeutraal_Do:
-      Serial.println(currentState);
       stoplichtCyclusNeutraal_Do();
       break;
     case STATE_stoplichtCyclusNeutraal_Exit:
-      Serial.println(currentState);
       stoplichtCyclusNeutraal_Exit();
       break;
     case STATE_stoplichtCyclus_Entry:
-    Serial.println(currentState);
       stoplichtCyclus_Entry();
       currentState = STATE_stoplichtCyclus_Do;
       break;
     case STATE_stoplichtCyclus_Do:
-    Serial.println(currentState);
       stoplichtCyclus_Do();
       break;
     case STATE_stoplichtCyclus_Exit:
-    Serial.println(currentState);
       stoplichtCyclus_Exit();
       currentState = STATE_stoplichtCyclusNeutraal_Entry;
       break;
     case STATE_slagboomDichtgaan_Entry:
-      Serial.println(currentState);
       slagboomDichtgaan_Entry();
       currentState = STATE_slagboomDichtgaan_Do;
       break;
     case STATE_slagboomDichtgaan_Do:
-    Serial.println(currentState);
       slagboomDichtgaan_Do();
       break;
     case STATE_slagboomDichtgaan_Exit:
-    Serial.println(currentState);
       slagboomDichtgaan_Exit();
       currentState = STATE_slagboomDicht_Entry;
       break;
     case STATE_slagboomDicht_Entry:
-    Serial.println(currentState);
       slagboomDicht_Entry();
       currentState = STATE_slagboomDicht_Do;
       break;
+
+
     case STATE_slagboomDicht_Do:
-      Serial.println(currentState);
       slagboomDicht_Do();
-      currentState = STATE_slagboomDicht_Do;
-      Serial.println("State");
       break;
     case STATE_slagboomDicht_Exit:
-      Serial.println(currentState);
       slagboomDicht_Exit();
       currentState = STATE_slagboomOpengaan_Entry;
       break;
+
+
+
     case STATE_slagboomOpengaan_Entry:
-    Serial.println(currentState);
       slagboomOpengaan_Entry();
       currentState = STATE_slagboomOpengaan_Do;
       break;
     case STATE_slagboomOpengaan_Do:
-    Serial.println(currentState);
       slagboomOpengaan_Do();
       break;
     case STATE_slagboomOpengaan_Exit:
-    Serial.println(currentState);
       slagboomOpengaan_Exit();
       currentState = STATE_slagboomOpen_Entry;
       break;
     case STATE_slagboomOpen_Entry:
-    Serial.println(currentState);
       slagboomOpen_Entry();
       currentState = STATE_slagboomOpen_Do;
       break;
     case STATE_slagboomOpen_Do:
-    Serial.println(currentState);
       slagboomOpen_Do();
       break;
     case STATE_slagboomOpen_Exit:
-    Serial.println(currentState);
       slagboomOpen_Exit();
       currentState = STATE_stoplichtCyclusNeutraal_Entry;
       break;
@@ -149,10 +136,9 @@ void slagboomDichtgaan_Entry(){
 }
 
 void slagboomDichtgaan_Do(){
-  slagboomControl_slagboomBewegen(slagboomStand_Sluiten);
-  stoplichtControl_stoplichtOranjeKnipperen(stoplichtKnipperen_START);
   buzzerControl_buzzerTikken(buzzer_SNEL);
-  currentState = STATE_slagboomDichtgaan_Exit;
+  slagboomControl_slagboomBewegen();
+
 }
 
 void slagboomDichtgaan_Exit(){
@@ -162,17 +148,22 @@ void slagboomDichtgaan_Exit(){
 // Slagboom Dicht States
 void slagboomDicht_Entry(){}
 
-void slagboomDicht_Do(
-  // stoplichtControl_stoplichtOranjeKnipperen(stoplichtKnipperen_START);
-  
-){}
-void slagboomDicht_Exit(){}
+void slagboomDicht_Do(){
+    stoplichtControl_stoplichtOranjeKnipperen();    
+    if (treinSensor == true && andereTreinSensor == true){
+      currentState = STATE_slagboomDicht_Exit;
+    }
+}
+void slagboomDicht_Exit(){
+  stoplichtControl_stoplichtOranjeKnipperenStop();
+}
 
 // Slagboom Opengaan States
 void slagboomOpengaan_Entry(){}
 void slagboomOpengaan_Do(){
   buzzerControl_buzzerTikken(buzzer_SNEL);
-  slagboomControl_slagboomBewegen(slagboomStand_Openen);
+  slagboomControl_slagboomBewegen();
+  
 }
 void slagboomOpengaan_Exit(){}
 
@@ -180,24 +171,31 @@ void slagboomOpengaan_Exit(){}
 void slagboomOpen_Entry(){}
 
 void slagboomOpen_Do(){
-  stoplichtControl_stoplichtOranjeKnipperen(stoplichtKnipperen_STOP);
+  
   displayControl_aftellen();
-  buzzerControl_buzzerTikken(buzzer_AFTELLEN);
+  
 }
 void slagboomOpen_Exit(){
+  displayControl_displayOff();
   buzzerControl_buzzerTikken(buzzer_STOP);
+  treinSensor = false;
+  andereTreinSensor = false;
+  ingedrukteKnopTrein = NULL;
+  ingedrukteKnopTreinAndereKant = NULL;
 }
 
 // Stoplicht Cyclus Neutraal States
-void stoplichtCyclusNeutraal_Entry(){}
+void stoplichtCyclusNeutraal_Entry(){
+
+}
 
 void stoplichtCyclusNeutraal_Do(){
-  if(ingedrukteKnop == 'W' || ingedrukteKnop == 'O'){
+  if(ingedrukteKnopTrein == 'W' || ingedrukteKnopTrein == 'O'){
     currentState = STATE_stoplichtCyclusNeutraal_Exit;
     treinSensor = true;
     // ingedrukteKnop = getIngedrukteKnop();
   }
-  else if (ingedrukteKnop == 'N' || ingedrukteKnop == 'Z'){
+  else if (ingedrukteKnopStoplicht == 'N' || ingedrukteKnopStoplicht == 'Z'){
     currentState = STATE_stoplichtCyclusNeutraal_Exit;
     // ingedrukteKnop = getIngedrukteKnop();
   }
@@ -206,7 +204,7 @@ void stoplichtCyclusNeutraal_Do(){
 void stoplichtCyclusNeutraal_Exit(){
   if (treinSensor == true){
     currentState = STATE_slagboomDichtgaan_Entry;
-  } else if (ingedrukteKnop == 'N' || ingedrukteKnop == 'Z'){
+  } else if (ingedrukteKnopStoplicht == 'N' || ingedrukteKnopStoplicht == 'Z'){
     currentState = STATE_stoplichtCyclus_Entry;
   }
 }
@@ -214,14 +212,54 @@ void stoplichtCyclusNeutraal_Exit(){
 void stoplichtCyclus_Entry(){}
 
 void stoplichtCyclus_Do(){
-  if (ingedrukteKnop == 'O' || ingedrukteKnop == 'W'){
-    treinSensor = true;
+    stoplichtControl_stoplichtCyclus(ingedrukteKnopStoplicht, ingedrukteKnopTrein);
+}
+
+void stoplichtCyclus_Exit(){
+  if(ingedrukteKnopStoplicht == 'N'){
+      setKnopNoordIngedrukt(false);
+  } else if (ingedrukteKnopStoplicht == 'Z') {
+    setKnopZuidIngedrukt(false);
   }
-  while (treinSensor == false){
-    stoplichtControl_stoplichtCyclus(ingedrukteKnop);
-    Serial.println(21);
+  ingedrukteKnopStoplicht = NULL;
+  ingedrukteKnopStoplichtWachtrij = NULL;
+  currentState = STATE_stoplichtCyclusNeutraal_Entry;
+}
+
+void assignButtons(boolean knopIngedrukt[]){
+  if(knopIngedrukt[0] == true && ingedrukteKnopStoplicht == NULL){
+    ingedrukteKnopStoplicht = 'N';
+  } else if (knopIngedrukt[0] == true && ingedrukteKnopStoplicht != NULL){
+    ingedrukteKnopStoplichtWachtrij = 'N';
+  } else if (knopIngedrukt[1] == true && ingedrukteKnopTrein == NULL){
+    ingedrukteKnopTrein = 'O';
+    treinSensor = true;
+    setKnopOostIngedrukt(false);
+  } else if (knopIngedrukt[1] == true && ingedrukteKnopTrein != NULL && ingedrukteKnopTrein != 'O'){
+    ingedrukteKnopTreinAndereKant = 'O';
+    andereTreinSensor = true;
+    setKnopOostIngedrukt(false);
+  } else if (knopIngedrukt[2] == true && ingedrukteKnopStoplicht == NULL){
+    ingedrukteKnopStoplicht = 'Z';
+  } else if (knopIngedrukt[2] == true && ingedrukteKnopStoplicht != NULL){
+    ingedrukteKnopStoplichtWachtrij = 'Z';
+  } else if (knopIngedrukt[3] == true && ingedrukteKnopTrein == NULL){
+    ingedrukteKnopTrein = 'W';
+    treinSensor = true;
+    setKnopWestIngedrukt(false);
+  } else if (knopIngedrukt[3] == true && ingedrukteKnopTrein != NULL && ingedrukteKnopTrein != 'W'){
+    ingedrukteKnopTrein = 'W';
+    andereTreinSensor = true;
+    setKnopWestIngedrukt(false);
+
   }
 }
 
-void stoplichtCyclus_Exit(){}
+
+
+
+
+
+
+
 

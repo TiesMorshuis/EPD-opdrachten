@@ -7,23 +7,23 @@ void buzzerControl_setup(){
 
 void buzzerControl_buzzerTikken(int patroon){
   switch (patroon){
-    case '1':
-        buzzerInterval = 1;//todo
-        buzzerDuratie = 1;//todo
-        buzzerFrequentie = 1;//todo
+    case 1:
+        buzzerInterval = 200;//todo
+        buzzerDuratie = 50;//todo
+        buzzerFrequentie = 400;//todo
         if (timerControl_timer(buzzerInterval) == true){
           tone(buzzerPin, buzzerFrequentie, buzzerDuratie);
         }
         break;
-    case '2':
-        buzzerInterval = 1;//todo
-        buzzerDuratie = 1;//todo
-        buzzerFrequentie = 1;//todo
+    case 2:
+        buzzerInterval = 450;//todo
+        buzzerDuratie = 50;//todo
+        buzzerFrequentie = 400;//todo
         if (timerControl_timer(buzzerInterval) == true){
           tone(buzzerPin, buzzerFrequentie, buzzerDuratie);
         }
         break;
-    case '0':
+    case 0:
       digitalWrite(buzzerPin, LOW);
       break;
   }
