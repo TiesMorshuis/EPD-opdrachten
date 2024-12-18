@@ -4,9 +4,9 @@ const int knopWest = A2;
 const int knopOost = A3;
 const int nr_Of_Knoppen = 4;
 const int knoppenLijst[] = {knopNoord, knopZuid, knopWest, knopOost};
-char buttonPressed;
 int buttonState;
 int eerstIngedrukteKnop;
+
 
 void buttonControl_setup() {
   for (int index = 0; index < nr_Of_Knoppen; index++){
@@ -58,6 +58,6 @@ int getEerstIngedrukteKnop(){
   return eerstIngedrukteKnop;
 }
 
-char getButtonPressed(){
-  return buttonPressed;
+char getIngedrukteKnop(){
+  return ingedrukteKnop;
 }

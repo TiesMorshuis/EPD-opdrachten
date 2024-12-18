@@ -1,7 +1,7 @@
 const int ledArray [] {2, 3, 4, 5, 6, 7};
 
 void ledControl_setup(){
-  for (int arrayIndex = 0; sizeof(ledArray); arrayIndex++){
+  for (int arrayIndex = 0; arrayIndex < sizeof(ledArray); arrayIndex++){
     pinMode(ledArray[arrayIndex], OUTPUT);
   }
 }

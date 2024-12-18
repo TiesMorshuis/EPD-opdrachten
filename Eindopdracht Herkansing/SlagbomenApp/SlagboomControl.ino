@@ -3,7 +3,8 @@ const int servoPin = 8;
 Servo servo;
 
 int slagboomStand;
-
+const int STATE_slagboomStand_openen = 1;
+const int STATE_slagboomStand_dichtgaan = 2;
 
 int slagboomControl_Interval = 100;
 
@@ -12,15 +13,15 @@ int huidigePositie;
 int eindPositie;
 
 
-void slagboomControl_setup(int slagboomStand_Openen) {
+void slagboomControl_setup(int STATE_slagboomStand_openen) {
   servo.attach(servoPin);
-  slagboomStand = slagboomStand_Openen;
+  slagboomStand = STATE_slagboomStand_openen;
 }
 
 void slagboomControl_slagboomBewegen(int slagboomStand) {
   boolean timer = timerControl_timer(slagboomControl_Interval);
   switch (slagboomStand) {
-    case slagboomStand_Openen:
+    case STATE_slagboomStand_openen:
       beginPositie = 90;
       huidigePositie = beginPositie;
       eindPositie = 180;
@@ -31,7 +32,7 @@ void slagboomControl_slagboomBewegen(int slagboomStand) {
       if (huidigePositie == eindPositie) {
         break;
       }
-    case slagboomStand_Sluiten:
+    case STATE_slagboomStand_dichtgaan:
       beginPositie = 180;
       huidigePositie = beginPositie;
       eindPositie = 90;
